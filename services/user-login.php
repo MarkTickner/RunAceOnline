@@ -1,13 +1,12 @@
 <?php
 
 //error_reporting(0);
-require 'database-connection.php';
+require '../helpers/database-connection.php';
 
-// Output as plain text
+// Output as JSON
 header('Content-Type: application/json');
 
-$errorList = array();
-$userDetails = array();
+$errorList = $userDetails = array();
 
 if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplication'], 'true') == 0) {
     // Request has originated from mobile application
@@ -67,7 +66,7 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
     $outputDetailsList = $errorList;
 
     // Redirect user
-    header('Location: http://stuweb.cms.gre.ac.uk/~tm112/project/');
+    header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
 }
 
 // Set JSON response

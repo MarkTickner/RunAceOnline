@@ -42,6 +42,10 @@ ul.navigation > li {
     padding: 2rem;
 }
 
+.validation-error {
+    color: #8E0000;
+}
+
 .error {
     background-color: #F7E6E6;
     color: #8E0000;

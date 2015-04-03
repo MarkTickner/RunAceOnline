@@ -7,7 +7,7 @@ require '../helpers/database-connection.php';
 header('Content-Type: application/json');
 
 $errorList = array();
-$runDetails = array();
+$profileDetails = array();
 
 if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplication'], 'true') == 0) {
     // Request has originated from mobile application
@@ -17,15 +17,23 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
         array_push($errorList, 200);
     } else {
         // Server-side validation
-        // Validate run ID
-        $runId = mysqli_real_escape_string($link, stripslashes($_POST['runId']));
-        if (!preg_match('/^[0-9]{1,}$/', $runId)) {
-            // Run ID not valid
-            array_push($errorList, 500);
+        // Validate user ID
+        $userId = mysqli_real_escape_string($link, stripslashes($_POST['userId']));
+        if (!preg_match('/^[0-9]{1,}$/', $userId)) {
+            // User ID not valid
+            array_push($errorList, 300);
         }
 
-        // Get run from database
-        array_push($runDetails, GetRunByRunId($link, $runId));
+        // Output user statistics
+        $profileStatistics = GetUserProfileStatistics($link, $userId);
+        $profileDetails['Score'] = $profileStatistics['SCORE'];
+        $profileDetails['TotalRuns'] = $profileStatistics['TOTAL_RUNS'];
+        $profileDetails['TotalChallenges'] = $profileStatistics['TOTAL_CHALLENGES'];;
+        $profileDetails['TotalDistance'] = $profileStatistics['TOTAL_DISTANCE'];;
+        $profileDetails['TotalTime'] = $profileStatistics['TOTAL_TIME'];;
+
+        // Get badges from database
+        $profileDetails['Badges'] = GetBadgesByUserId($link, $userId);
 
         // Close connection
         CloseConnection($link);
@@ -35,25 +43,24 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
     if (count($errorList) > 0) {
         // Errors
         $outputType = 'Error';
-        $outputDetailsList = $errorList;
+        $profileDetails = $errorList;
     } else {
         // No errors
         $outputType = 'Success';
-        $outputDetailsList = $runDetails;
     }
 } else {
     // Unauthorised request
     $outputType = 'Error';
     array_push($errorList, 100);
 
-    $outputDetailsList = $errorList;
+    $profileDetails = $errorList;
 
     // Redirect user
     header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
 }
 
 // Set JSON response
-$outputJson = array('OutputType' => $outputType, 'Details' => $outputDetailsList);
+$outputJson = array('OutputType' => $outputType, 'Details' => $profileDetails);
 exit(json_encode($outputJson));
 
 ?>

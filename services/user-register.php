@@ -1,12 +1,13 @@
 <?php
 
 error_reporting(0);
-require 'database-connection.php';
+require '../helpers/database-connection.php';
+require '../helpers/email-helper.php';
 
-// Output as plain text
+// Output as JSON
 header('Content-Type: application/json');
 
-$errorList = array();
+$errorList = $userDetails = array();
 
 if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplication'], 'true') == 0) {
     // Request has originated from mobile application
@@ -58,47 +59,19 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
 
             if (RegisterUser($link, $name, $email, $password, $salt)) {
                 // Successfully registered
-                $userId = mysqli_insert_id($link);
+                // Get user details from database
+                $userDetails = GetUserByUserId($link, mysqli_insert_id($link));
 
                 // Send confirmation email
-                $subject = 'RunAce Registration';
-                $message = '<html>
-                                    <head>
-                                        <title>RunAce</title>
-                                        <meta name="author" content="Mark Tickner">
-                                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                                    </head>
-                                    <body style="font-family: \'Arial\', sans-serif; background-color: #EEEEEE;">
-                                        <div style="background-color: #FFFFFF; padding: 2rem; border-radius: 4px;">
-                                            <h1 style="margin-top: 0;"><img src="http://stuweb.cms.gre.ac.uk/~tm112/project/images/text-logo-small.png" alt="RunAce" height="66" width="200"></h1>
-                                            <p>' . $name . ',</p>
-                                            <p>Welcome to RunAce, the best way to increase your running motivation!</p>
-                                        </div>
-                                    </body>
-                                </html>';
-                $headers = 'From: RunAce <runace@mtickner.co.uk>' . "\r\n";
-                $headers .= 'MIME-Version: 1.0' . "\r\n";
-                $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                mail($email, $subject, $message, $headers);
+                $body = '<p>' . $userDetails['NAME'] . ',</p>
+                         <p>Welcome to RunAce, the best way to increase your running motivation!</p>';
+                SendEmail($userDetails['EMAIL'], 'RunAce Registration', $body);
 
                 // Send email to me
-                $subject = 'New RunAce Registration';
-                $message = '<html>
-                                    <head>
-                                        <title>RunAce</title>
-                                        <meta name="author" content="Mark Tickner">
-                                        <meta name="viewport" content="width=device-width, initial-scale=1">
-                                    </head>
-                                    <body style="font-family: \'Arial\', sans-serif; background-color: #EEEEEE;">
-                                        <div style="background-color: #FFFFFF; padding: 2rem; border-radius: 4px;">
-                                            <h1 style="margin-top: 0;"><img src="http://stuweb.cms.gre.ac.uk/~tm112/project/images/text-logo-small.png" alt="RunAce" height="66" width="200"></h1>
-                                            <p>ID: ' . $userId . '</p>
-                                            <p>Name: ' . $name . '</p>
-                                            <p>Email: ' . $email . '</p>
-                                        </div>
-                                    </body>
-                                </html>';
-                mail('runace@mtickner.co.uk', $subject, $message, $headers);
+                $body = '<p>ID: ' . $userDetails['ID'] . '</p>
+                            <p>Name: ' . $userDetails['NAME'] . '</p>
+                            <p>Email: ' . $userDetails['EMAIL'] . '</p>';
+                SendEmail('runace@mtickner.co.uk', 'New RunAce Registration', $body);
 
                 // Close connection
                 CloseConnection($link);
@@ -113,22 +86,25 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
     if (count($errorList) > 0) {
         // Errors
         $outputType = 'Error';
+        $outputDetailsList = $errorList;
     } else {
         // No errors
         $outputType = 'Success';
-        array_push($errorList, $userId);
+        $outputDetailsList = $userDetails;
     }
 } else {
     // Unauthorised request
     $outputType = 'Error';
     array_push($errorList, 100);
 
+    $outputDetailsList = $errorList;
+
     // Redirect user
-    header('Location: http://stuweb.cms.gre.ac.uk/~tm112/project/');
+    header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
 }
 
 // Set JSON response
-$outputJson = array('OutputType' => $outputType, 'Details' => $errorList);
+$outputJson = array('OutputType' => $outputType, 'Details' => $outputDetailsList);
 exit(json_encode($outputJson));
 
 ?>

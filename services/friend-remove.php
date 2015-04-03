@@ -7,7 +7,7 @@ require '../helpers/database-connection.php';
 header('Content-Type: application/json');
 
 $errorList = array();
-$runDetails = array();
+$outputDetailsList = array();
 
 if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplication'], 'true') == 0) {
     // Request has originated from mobile application
@@ -17,18 +17,29 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
         array_push($errorList, 200);
     } else {
         // Server-side validation
-        // Validate run ID
-        $runId = mysqli_real_escape_string($link, stripslashes($_POST['runId']));
-        if (!preg_match('/^[0-9]{1,}$/', $runId)) {
-            // Run ID not valid
-            array_push($errorList, 500);
+        // Validate user ID 1
+        $user1Id = mysqli_real_escape_string($link, stripslashes($_POST['user1Id']));
+        if (!preg_match('/^[0-9]{1,}$/', $user1Id)) {
+            // User ID 1 not valid
+            array_push($errorList, 300);
         }
 
-        // Get run from database
-        array_push($runDetails, GetRunByRunId($link, $runId));
+        // Validate user ID 2
+        $user2Id = mysqli_real_escape_string($link, stripslashes($_POST['user2Id']));
+        if (!preg_match('/^[0-9]{1,}$/', $user2Id)) {
+            // User ID 2 not valid
+            array_push($errorList, 300);
+        }
 
-        // Close connection
-        CloseConnection($link);
+        // Unfriend users
+        if (Unfriend($link, $user1Id, $user2Id)) {
+            // Successfully unfriended
+            // Close connection
+            CloseConnection($link);
+        } else {
+            // Database error occurred
+            array_push($errorList, 201);
+        }
     }
 
     // Check for and display any errors
@@ -39,14 +50,11 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
     } else {
         // No errors
         $outputType = 'Success';
-        $outputDetailsList = $runDetails;
     }
 } else {
     // Unauthorised request
     $outputType = 'Error';
     array_push($errorList, 100);
-
-    $outputDetailsList = $errorList;
 
     // Redirect user
     header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
