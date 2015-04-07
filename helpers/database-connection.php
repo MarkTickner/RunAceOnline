@@ -146,7 +146,6 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         $friends = array();
 
         // Add each user to the friends array
-        // Source: http://php.net/manual/en/mysqli-result.fetch-assoc.php
         while ($user = mysqli_fetch_assoc($result)) {
             // Get user array
             $user['USER_ID'] = GetUserByUserId($link, $user['USER_ID']);
@@ -268,7 +267,6 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         $challenges = array();
 
         // Add each challenge to the challenges array
-        // Source: http://php.net/manual/en/mysqli-result.fetch-assoc.php
         while ($challenge = mysqli_fetch_assoc($result)) {
             // Get run array
             $challenge['RUN_ID'] = GetRunByRunId($link, $challenge['RUN_ID']);
@@ -329,7 +327,6 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         $runs = array();
 
         // Add each run to the runs array
-        // Source: http://php.net/manual/en/mysqli-result.fetch-assoc.php
         while ($run = mysqli_fetch_assoc($result)) {
             // Get user array
             $run['USER_ID'] = GetUserByUserId($link, $run['USER_ID']);
