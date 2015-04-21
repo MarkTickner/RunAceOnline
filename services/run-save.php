@@ -92,7 +92,11 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
 
                         // Award points for challenge
                         $userScoreA = GetUserScore($link, $userId);
-                        $userScoreB = GetUserScore($link, GetChallengeByChallengeId($link, $challengeId, false)['RUN_ID']['USER_ID']['ID']);
+                        //$userScoreB = GetUserScore($link, GetChallengeByChallengeId($link, $challengeId, false)['RUN_ID']['USER_ID']['ID']); // PHP 5.4+
+                        $challengeArray = GetChallengeByChallengeId($link, $challengeId, false);
+                        $challengeRunArray = $challengeArray['RUN_ID'];
+                        $challengeRunUserArray = $challengeRunArray['USER_ID'];
+                        $userScoreB = GetUserScore($link, $challengeRunUserArray['ID']);
 
                         if ($userScoreA < 250) {
                             $weight = 35;
@@ -160,7 +164,7 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
     $outputDetailsList = $errorList;
 
     // Redirect user
-    header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
+    header('Location: http://www.mtickner.co.uk/runace/');
 }
 
 // Set JSON response

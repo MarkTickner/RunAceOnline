@@ -40,7 +40,7 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
         // Send password reset email
         $body = '<p>' . $user['NAME'] . ',</p>
                  <p>A request to reset your password has been made. Click the below link to reset it or ignore this email if you did not make the request yourself.</p>
-                 <p><a href="https://stuweb.cms.gre.ac.uk/~tm112/project/password-reset.php?em=' . $user['EMAIL'] . '&vs=' . $verificationString . '" style="display: inline-block; height: 38px; padding: 0 30px; color: #555; text-align: center; font-size: 1rem; font-weight: 600; line-height: 38px; letter-spacing: .1rem; text-transform: uppercase; text-decoration: none; border-radius: 4px; border: 1px solid #bbb; box-sizing: border-box; margin-bottom: 1rem;">Reset Password</a></p>';
+                 <p><a href="http://www.mtickner.co.uk/runace-online/password-reset.php?em=' . $user['EMAIL'] . '&vs=' . $verificationString . '" style="display: inline-block; height: 38px; padding: 0 30px; color: #555; text-align: center; font-size: 1rem; font-weight: 600; line-height: 38px; letter-spacing: .1rem; text-transform: uppercase; text-decoration: none; border-radius: 4px; border: 1px solid #bbb; box-sizing: border-box; margin-bottom: 1rem;">Reset Password</a></p>';
         SendEmail($email, 'RunAce Password Reset', $body);
     }
 
@@ -59,7 +59,7 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
     array_push($errorList, 100);
 
     // Redirect user
-    header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
+    header('Location: http://www.mtickner.co.uk/runace/');
 }
 
 // Set JSON response

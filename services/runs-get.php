@@ -49,7 +49,7 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
     $outputDetailsList = $errorList;
 
     // Redirect user
-    header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
+    header('Location: http://www.mtickner.co.uk/runace/');
 }
 
 // Set JSON response

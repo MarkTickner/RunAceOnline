@@ -4,7 +4,7 @@
 // Source: http://board.phpbuilder.com/showthread.php?10263469#post10986948
 if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     // File requested directly, redirect user
-    header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
+    header('Location: http://www.mtickner.co.uk/runace/');
 } else {
     // Function that returns email headers
     function GetHeaders() {
@@ -23,7 +23,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
                         </head>
                         <body style="font-family: \'Arial\', sans-serif; background-color: #EEEEEE;">
                             <div style="background-color: #FFFFFF; padding: 2rem; border-radius: 4px;">
-                                <h1 style="margin-top: 0;"><img src="https://stuweb.cms.gre.ac.uk/~tm112/project/images/text-logo-small.png" alt="RunAce" height="66" width="200"></h1>
+                                <h1 style="margin-top: 0;"><img src="http://www.mtickner.co.uk/wp-content/uploads/2015/01/runace-text-logo-small-300x99.png" alt="RunAce" height="66" width="200"></h1>
                                 ' . $body . '
                             </div>
                         </body>

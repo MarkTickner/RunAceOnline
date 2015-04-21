@@ -4,11 +4,11 @@
 // Source: http://board.phpbuilder.com/showthread.php?10263469#post10986948
 if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     // File requested directly, redirect user
-    header('Location: https://stuweb.cms.gre.ac.uk/~tm112/project/');
+    header('Location: http://www.mtickner.co.uk/runace/');
 } else {
     // Function to create a database connection
     function GetConnection() {
-        require '/home/tm112/include/mysql.php';
+        require strstr(__FILE__, 'www.mtickner.co.uk', true) . '/www.mtickner.co.uk/includes/mysql.php';
 
         // Return database link
         return mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName);
@@ -43,7 +43,9 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         // Get salt from database
         $sql = "SELECT PASSWORD_SALT FROM PROJECT_USER WHERE EMAIL = '$email'";
         $result = mysqli_query($link, $sql);
-        $salt = mysqli_fetch_assoc($result)['PASSWORD_SALT'];
+        //$salt = mysqli_fetch_assoc($result)['PASSWORD_SALT']; // PHP 5.4+
+        $saltArray = mysqli_fetch_assoc($result);
+        $salt = $saltArray['PASSWORD_SALT'];
         $password = crypt($password, $salt);
 
         $sql = "SELECT ID FROM PROJECT_USER WHERE EMAIL = '$email' AND PASSWORD = '$password'";
@@ -113,7 +115,9 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         $sql = "SELECT SUM(POINTS) AS SCORE FROM PROJECT_SCORE WHERE USER_ID = $userId";
         $result = mysqli_query($link, $sql);
 
-        return mysqli_fetch_assoc($result)['SCORE'];
+        //return mysqli_fetch_assoc($result)['SCORE']; // PHP 5.4+
+        $scoreArray = mysqli_fetch_assoc($result);
+        return $scoreArray['SCORE'];
     }
 
 
@@ -287,7 +291,9 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     function GetChallengeCountByUserId($link, $userId) {
         $sql = "SELECT COUNT(ID) AS CHALLENGE_COUNT FROM PROJECT_CHALLENGE WHERE USER_ID = $userId AND DATE_COMPLETED IS NOT NULL";
         $result = mysqli_query($link, $sql);
-        $challengeCount = mysqli_fetch_assoc($result)['CHALLENGE_COUNT'];
+        //$challengeCount = mysqli_fetch_assoc($result)['CHALLENGE_COUNT']; // PHP 5.4+
+        $challengeCountArray = mysqli_fetch_assoc($result);
+        $challengeCount = $challengeCountArray['CHALLENGE_COUNT'];
 
         return $challengeCount;
     }
@@ -341,7 +347,9 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
     function GetRunCountByUserId($link, $userId) {
         $sql = "SELECT COUNT(ID) AS RUN_COUNT FROM PROJECT_RUN WHERE USER_ID = $userId";
         $result = mysqli_query($link, $sql);
-        $runCount = mysqli_fetch_assoc($result)['RUN_COUNT'];
+        //$runCount = mysqli_fetch_assoc($result)['RUN_COUNT']; // PHP 5.4+
+        $runCountArray = mysqli_fetch_assoc($result);
+        $runCount = $runCountArray['RUN_COUNT'];
 
         return $runCount;
     }
