@@ -8,7 +8,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
 } else {
     // Function to create a database connection
     function GetConnection() {
-        require strstr(__FILE__, 'www.mtickner.co.uk', true) . '/www.mtickner.co.uk/includes/mysql.php';
+        require 'mysql.php';
 
         // Return database link
         return mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName);
