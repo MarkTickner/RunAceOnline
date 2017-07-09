@@ -1,1 +1,1 @@
-helpers/mysql.php filter=git-crypt diff=git-crypt
+api/helpers/mysql.php filter=git-crypt diff=git-crypt

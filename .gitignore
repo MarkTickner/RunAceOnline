@@ -2,3 +2,5 @@
 !.idea/runConfigurations/
 
 target/
+
+api/helpers/salt.php
