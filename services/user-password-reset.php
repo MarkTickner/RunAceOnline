@@ -34,8 +34,14 @@ if (isset($_POST['requestFromApplication']) && strcmp($_POST['requestFromApplica
         // Generate verification string
         $verificationString = crypt($user['ID'] . $user['DATE_REGISTERED'], $user['NAME']);
 
-        // Close connection
-        CloseConnection($link);
+        // Save verification string
+        if (SetPasswordResetVerificationString($link, $email, $verificationString)) {
+            // Close connection
+            CloseConnection($link);
+        } else {
+            // Database error occurred
+            array_push($errorList, 201);
+        }
 
         // Send password reset email
         $body = '<p>' . $user['NAME'] . ',</p>

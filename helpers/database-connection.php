@@ -58,9 +58,15 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         }
     }
 
+    // Function to save a users the password reset verification string
+    function SetPasswordResetVerificationString($link, $email, $verificationString) {
+        $sql = "UPDATE PROJECT_USER SET VS = '$verificationString' WHERE EMAIL = '$email'";
+        return mysqli_query($link, $sql);
+    }
+
     // Function to reset a users password
     function ResetPassword($link, $userId, $password, $salt) {
-        $sql = "UPDATE PROJECT_USER SET PASSWORD = '$password', PASSWORD_SALT = '$salt' WHERE ID = $userId";
+        $sql = "UPDATE PROJECT_USER SET PASSWORD = '$password', PASSWORD_SALT = '$salt', VS = '' WHERE ID = $userId";
         return mysqli_query($link, $sql);
     }
 
