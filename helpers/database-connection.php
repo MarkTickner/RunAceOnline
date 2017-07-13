@@ -11,7 +11,7 @@ if (basename(__FILE__) == basename($_SERVER['SCRIPT_FILENAME'])) {
         require 'mysql.php';
 
         // Return database link
-        return mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName);
+        return mysqli_connect($dbHost, $dbUsername, $dbPassword, $dbName, $dbPort);
     }
 
     // Function to close the database connection
